@@ -44,7 +44,9 @@ h1,h2,h3{margin-top:0}.btn,.choice,.add{border:1px solid var(--b);background:#ff
  .sp-table th:last-child,.sp-table td:last-child{text-align:right;width:25%}.sp-table td{padding:9px 10px;border-bottom:1px solid #d9e2e7}
  .sp-table tfoot td{font-size:15px;font-weight:800;border-top:2px solid #24404f;border-bottom:0;padding-top:12px}
  .sp-price{margin:22px 0 0 auto;width:52%;background:#edf6fb;border-radius:9px;padding:13px 15px;display:flex;justify-content:space-between;gap:12px}
- .sp-price strong{font-size:17px}.sp-note{font-size:9px;color:#6e7d87;line-height:1.45;margin-top:24px}
+.sp-price strong{font-size:17px}.sp-note{font-size:9px;color:#6e7d87;line-height:1.45;margin-top:24px}
+.sp-remarks{font-size:11px;white-space:pre-wrap;margin-top:16px}
+textarea{width:100%;padding:11px;border:1px solid #cbd7dd;border-radius:10px;font:inherit;resize:vertical}
 }
 
 
@@ -76,7 +78,7 @@ h1,h2,h3{margin-top:0}.btn,.choice,.add{border:1px solid var(--b);background:#ff
  <div class="card">
   <h2>1. Type d'intervention</h2>
   <div class="tabs" id="typeTabs"></div>
-  <div class="project" style="margin-top:12px"><div><label>Client</label><input id="client"></div><div><label>Projet / adresse</label><input id="project"></div></div>
+  <div class="project" style="margin-top:12px"><div><label for="client">Client</label><input id="client" autocomplete="organization"></div><div><label for="project">Projet / adresse</label><input id="project"></div><div><label for="estimateDate">Date</label><input id="estimateDate" type="date"></div></div>
  </div>
  <div class="grid">
   <main>
@@ -84,9 +86,11 @@ h1,h2,h3{margin-top:0}.btn,.choice,.add{border:1px solid var(--b);background:#ff
    <section id="glassPanel" class="card" hidden><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h2>2. Vitres et stores</h2><div class="mut">Temps complet par pièce. Fenêtres = intérieur + extérieur + cadres.</div></div><button class="btn primary no-print" id="addGlassBtn">+ Ajouter</button></div><div id="glassJobs"></div></section>
    <section id="entPanel" class="card" hidden><h2>2. Entretien</h2><div class="mut">Décrivez le local. Le calcul combine surface, équipements, niveau et fréquence.</div><div id="entBody"></div><div id="entRangeNote" class="mut" style="margin-top:10px">Temps probable par intervention. Le temps peut varier selon l’état, le mobilier, l’encombrement et l’évaluation du technicien.</div></section>
    <section id="specialPanel" class="card" hidden><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h2>2. Travaux spécifiques</h2><button class="btn primary no-print" id="addSpecialBtn">+ Ajouter</button></div><div id="specialJobs"></div></section>
+   <section id="extrasPanel" class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><h2>3. Prestations complémentaires</h2><div class="mut">Ajoutez une surface ou une tâche au même projet.</div></div><button class="btn primary no-print" id="addExtraBtn">+ Ajouter</button></div><div id="extraJobs"></div></section>
+   <section class="card"><label for="remarks">Remarques pour l'estimation</label><textarea id="remarks" rows="3" placeholder="Accès, état, prestations incluses…"></textarea></section>
   </main>
   <aside><div class="card"><h2>Récapitulatif</h2><div class="sum"><span>Type</span><b id="summaryType"></b></div><div id="summaryLines"></div><div class="grand"><span>Temps de travail estimé</span><span id="hours">0.00 h</span></div><label style="margin-top:12px">Équipe (personnes)</label><input id="crew" type="number" min="1" value="1"><div class="sum"><span>Durée estimée sur place</span><b id="crewTime">0.00 h</b></div><div id="publicPriceBox"><div class="sum"><span>Fourchette de prix indicative</span><b id="priceRange">0–0 CHF</b></div><div class="mut" style="margin-top:7px">Ordre de grandeur uniquement : environ 35–70 CHF par heure estimée. Le prix réel dépend de l'entreprise et de l'évaluation du technicien.</div></div>
-<div id="proPriceBox" hidden><div class="sum"><span>Tarif professionnel</span><b id="proRate">55 CHF/h</b></div><div class="sum"><span>Estimation professionnelle</span><b id="proPrice">0 CHF</b></div><div class="mut" style="margin-top:7px">Calcul interne selon votre tarif horaire enregistré dans Paramètres.</div></div><div id="printProPrice" class="print-only"><div class="sum"><span>Tarif professionnel</span><b id="printProRate">55 CHF/h</b></div><div class="sum"><span>Prix estimé</span><b id="printProTotal">0 CHF</b></div></div><div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn primary" id="printBtn" style="flex:1">🖨 Imprimer</button></div><div class="notice">Estimation indicative : état, accès, encombrement, surfaces et niveau de finition peuvent modifier le temps réel.</div></div></aside>
+<div id="proPriceBox" hidden><div class="sum"><span>Tarif professionnel</span><b id="proRate">55 CHF/h</b></div><div class="sum"><span>Estimation professionnelle</span><b id="proPrice">0 CHF</b></div><div class="mut" style="margin-top:7px">Calcul interne selon votre tarif horaire enregistré dans Paramètres.</div></div><div id="printProPrice" class="print-only"><div class="sum"><span>Tarif professionnel</span><b id="printProRate">55 CHF/h</b></div><div class="sum"><span>Prix estimé</span><b id="printProTotal">0 CHF</b></div></div><div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn primary" id="printBtn" style="flex:1">🖨 Imprimer / PDF</button></div><div class="notice">Estimation indicative : état, accès, encombrement, surfaces et niveau de finition peuvent modifier le temps réel.</div></div></aside>
  </div>
 </div><div class="wrap mut" style="text-align:center;padding-top:0;padding-bottom:22px">CleanEstimator · Version 1.0</div>
 
@@ -113,7 +117,7 @@ const DEFAULTS={
   "Store en toile":{"Petite":.40,"Standard":.60,"Grande":.90,"Très grande":1.2}
  },
  specials:[
-  {name:"Vitres / fenêtres",unit:"pièce",rate:2},{name:"Décapage de sol",unit:"m²",rate:35},{name:"Pose d'émulsion",unit:"m²",rate:45},{name:"Monobrossage / récurage",unit:"m²",rate:55},{name:"Autolaveuse",unit:"m²",rate:180},{name:"Moquette injection-extraction",unit:"m²",rate:55},{name:"Moquette très sale",unit:"m²",rate:35},{name:"Nettoyage haute pression",unit:"m²",rate:35},{name:"Panneaux solaires",unit:"panneau",rate:8},{name:"Store à lamelles",unit:"pièce",rate:1.5},{name:"Store en toile",unit:"pièce",rate:1.2},{name:"Pergola",unit:"m²",rate:10},{name:"Façade lavage",unit:"m²",rate:25},{name:"Désinfection",unit:"m²",rate:80},{name:"Déplacement mobilier",unit:"h",rate:1},{name:"Nacelle / hauteur",unit:"h",rate:1}
+  {name:"Vitres / fenêtres",unit:"pièce",rate:2},{name:"Décapage de sol",unit:"m²",rate:35},{name:"Pose d'émulsion",unit:"m²",rate:45},{name:"Monobrossage / récurage",unit:"m²",rate:55},{name:"Autolaveuse",unit:"m²",rate:180},{name:"Moquette injection-extraction",unit:"m²",rate:55},{name:"Moquette très sale",unit:"m²",rate:35},{name:"Nettoyage haute pression",unit:"m²",rate:35},{name:"Panneaux solaires",unit:"panneau",rate:8},{name:"Store à lamelles",unit:"pièce",rate:1.5},{name:"Store en toile",unit:"pièce",rate:1.2},{name:"Pergola",unit:"m²",rate:10},{name:"Façade lavage",unit:"m²",rate:25},{name:"Désinfection",unit:"m²",rate:80},{name:"Déplacement mobilier",unit:"h",rate:1},{name:"Nacelle / hauteur",unit:"h",rate:1},{name:"Aspiration des sols",unit:"m²",rate:180},{name:"Lavage manuel des sols",unit:"m²",rate:100},{name:"Nettoyage des escaliers",unit:"volée",rate:4},{name:"Nettoyage des luminaires",unit:"pièce",rate:6},{name:"Nettoyage des plafonds",unit:"m²",rate:35},{name:"Nettoyage des armoires intérieures",unit:"pièce",rate:2},{name:"Nettoyage des garde-corps",unit:"m",rate:15}
  ],
  entRates:{"Bureaux":300,"Appartement / Maison":180,"Commerce":350,"Cabinet":220,"Parties communes":400,"Autre":280},
  entTasks:{workstation:1.5,wc:3,washbasin:3,cafe:10,meeting:5,bin:1.25,bathroom:18,showerroom:14,separateWC:8,kitchen:22,bedroom:4,livingroom:8,stairs:4,hall:8,elevatorSmall:5,elevatorStandard:7,elevatorLarge:9},
@@ -126,19 +130,20 @@ function loadConfig(){try{
  if(!x)return d;
  Object.assign(d,x);
  d.professional=Object.assign({},DEFAULTS.professional,x.professional||{});d.entTasks=Object.assign({},DEFAULTS.entTasks,x.entTasks||{});d.floorFactors=Object.assign({},DEFAULTS.floorFactors,x.floorFactors||{});
+ if(Array.isArray(x.specials))d.specials=[...x.specials,...DEFAULTS.specials.filter(item=>!x.specials.some(saved=>saved.name===item.name))];
  return d
 }catch(e){return clone(DEFAULTS)}}
 let config=loadConfig();
-let state={type:"Fin de bail",rooms:[],glass:[],specials:[],crew:1,settingsTab:"rooms",ent:{kind:"Bureaux",sqm:100,workstations:8,wc:1,washbasins:1,cafe:1,meeting:1,bins:8,swissRooms:"4.5",bedrooms:3,livingrooms:1,bathrooms:1,showerrooms:0,separateWCs:1,kitchens:1,stairs:1,floorsCount:3,halls:1,elevators:1,elevatorSize:"Standard",floor:"Mixte",level:"Standard",freq:"1w"}};
+let state={type:"Fin de bail",rooms:[],glass:[],specials:[],extras:[],crew:1,settingsTab:"rooms",ent:{kind:"Bureaux",sqm:100,workstations:8,wc:1,washbasins:1,cafe:1,meeting:1,bins:8,swissRooms:"4.5",bedrooms:3,livingrooms:1,bathrooms:1,showerrooms:0,separateWCs:1,kitchens:1,stairs:1,floorsCount:3,halls:1,elevators:1,elevatorSize:"Standard",floor:"Mixte",level:"Standard",freq:"1w"}};
 let pendingRoom=null;
 function saveEstimate(){
  try{
   let data={
-   type:state.type,rooms:state.rooms,glass:state.glass,specials:state.specials,
+   type:state.type,rooms:state.rooms,glass:state.glass,specials:state.specials,extras:state.extras,
    crew:Math.max(1,num($("crew")?.value||state.crew,1)),
    ent:state.ent,
    client:$("client")?.value||"",
-   project:$("project")?.value||""
+   project:$("project")?.value||"",date:$("estimateDate")?.value||"",remarks:$("remarks")?.value||""
   };
   localStorage.setItem("cleanestimator_estimate",JSON.stringify(data));
  }catch(e){console.warn("Estimate autosave unavailable",e)}
@@ -151,6 +156,7 @@ function loadEstimate(){
   if(Array.isArray(d.rooms))state.rooms=d.rooms;
   if(Array.isArray(d.glass))state.glass=d.glass;
   if(Array.isArray(d.specials))state.specials=d.specials;
+  if(Array.isArray(d.extras))state.extras=d.extras;
   if(d.ent&&typeof d.ent==="object"){
    state.ent=Object.assign(state.ent,d.ent);
    if(state.ent.level==="Renforcé")state.ent.level="Approfondie";
@@ -165,6 +171,8 @@ function loadEstimate(){
   state.crew=Math.max(1,num(d.crew,1));
   $("client").value=d.client||"";
   $("project").value=d.project||"";
+  $("estimateDate").value=d.date||"";
+  $("remarks").value=d.remarks||"";
   $("crew").value=state.crew;
  }catch(e){console.warn("Estimate restore unavailable",e)}
 }
@@ -194,6 +202,8 @@ $("pickerBody").addEventListener("click",e=>{
  if(e.target.closest("[data-room-custom]")){let n=prompt("Nom de la pièce / zone :");if(n?.trim()){n=n.trim();if(!config.roomNames.includes(n))config.roomNames.push(n);for(let t of ["Fin de bail","Fin de chantier"]){config.roomTimes[t][n]=[.5,.75,1]}saveConfig();closeModal("pickerModal");openRoomConfig(n)}}
  let gb=e.target.closest("[data-glasspick]");if(gb){state.glass.push({name:gb.dataset.glasspick,qty:1,size:"Standard",soil:1});closeModal("pickerModal");renderAll()}
  let sb=e.target.closest("[data-specialpick]");if(sb){let x=config.specials[+sb.dataset.specialpick];state.specials.push({name:x.name,unit:x.unit,rate:x.rate,qty:1,soil:1,size:1});closeModal("pickerModal");renderAll()}
+ let eb=e.target.closest("[data-extrapick]");if(eb){let x=config.specials[+eb.dataset.extrapick];state.extras.push({name:x.name,unit:x.unit,rate:x.rate,qty:1,soil:1});closeModal("pickerModal");renderAll()}
+ let eg=e.target.closest("[data-extraglass]");if(eg){state.extras.push({kind:"glass",name:eg.dataset.extraglass,qty:1,size:"Standard",soil:1});closeModal("pickerModal");renderAll()}
 });
 function openRoomConfig(name){
  pendingRoom={name,size:"Standard",base:roomTime(state.type,name,"Standard"),windows:0,windowSize:"Standard",bays:0,baySize:"Standard",blinds:0,blindSize:"Standard",awnings:0,awningSize:"Standard",armoires:0,armoireTime:.5};
@@ -238,6 +248,13 @@ function specialChange(e,finalize=false){
 $("specialJobs").addEventListener("input",e=>specialChange(e,false));
 $("specialJobs").addEventListener("change",e=>specialChange(e,true));
 $("specialJobs").addEventListener("click",e=>{if(e.target.dataset.sdel!==undefined){state.specials.splice(+e.target.dataset.sdel,1);renderAll()}});
+$("addExtraBtn").onclick=()=>{$("pickerTitle").textContent="Ajouter une prestation complémentaire";$("pickerBody").innerHTML=Object.keys(config.glass).map(n=>`<button class="choice" data-extraglass="${esc(n)}">${esc(n)}<small>Temps complet selon la taille</small></button>`).join("")+config.specials.map((x,i)=>`<button class="choice" data-extrapick="${i}">${esc(x.name)}<small>${esc(x.unit)} · rendement ${x.rate}/h</small></button>`).join("");openModal("pickerModal")};
+function extraLineHours(x){return x.kind==="glass"?num(x.qty)*glassTime(x.name,x.size)*num(x.soil,1):num(x.qty)/Math.max(.01,num(x.rate,1))*num(x.soil,1)}
+function extraHours(){return state.extras.reduce((s,x)=>s+extraLineHours(x),0)}
+function renderExtras(){$("extraJobs").innerHTML=state.extras.length?state.extras.map((x,i)=>`<div class="special"><div><b>${esc(x.name)}</b><button class="x no-print" title="Supprimer" data-edel="${i}">×</button></div><div class="project"><div><label>Quantité ${x.kind==="glass"?"":`(${esc(x.unit)})`}</label><input data-ei="${i}" data-ef="qty" type="number" min="0" step=".1" value="${x.qty}"></div><div><label>${x.kind==="glass"?"Taille":"Rendement par heure"}</label>${x.kind==="glass"?`<select data-ei="${i}" data-ef="size">${["Petite","Standard","Grande","Très grande"].map(z=>`<option ${x.size===z?"selected":""}>${z}</option>`).join("")}</select>`:`<input data-ei="${i}" data-ef="rate" type="number" min=".01" step=".1" value="${x.rate}">`}</div><div><label>Salissure</label><select data-ei="${i}" data-ef="soil"><option value=".85" ${x.soil==.85?"selected":""}>Légère</option><option value="1" ${x.soil==1?"selected":""}>Normale</option><option value="1.25" ${x.soil==1.25?"selected":""}>Forte</option><option value="1.6" ${x.soil==1.6?"selected":""}>Très forte</option></select></div></div><div class="sum"><span>Temps</span><b>${hfmt(extraLineHours(x))}</b></div></div>`).join(""):`<p class="mut">Aucune prestation complémentaire.</p>`}
+$("extraJobs").addEventListener("input",e=>{let i=e.target.dataset.ei;if(i===undefined)return;state.extras[+i][e.target.dataset.ef]=e.target.dataset.ef==="size"?e.target.value:num(e.target.value);renderSummary()});
+$("extraJobs").addEventListener("change",e=>{if(e.target.dataset.ei!==undefined)renderAll()});
+$("extraJobs").addEventListener("click",e=>{if(e.target.dataset.edel!==undefined){state.extras.splice(+e.target.dataset.edel,1);renderAll()}});
 const ENT_KINDS=["Bureaux","Appartement / Maison","Commerce","Cabinet","Parties communes","Autre"];
 function field(label,key,val,step=1){return `<div><label>${label}</label><input data-ent="${key}" type="number" min="0" step="${step}" value="${val}"></div>`}
 function renderEnt(){
@@ -302,13 +319,14 @@ function entretienRange(){
  return [lo,hi];
 }
 function rangeFmt(a,b){return `${hfmt(a)} – ${hfmt(b)}`}
-function renderSummary(){let h=calcHours(),lines="";if(["Fin de bail","Fin de chantier"].includes(state.type)){
+function renderSummary(){let baseHours=calcHours(),h=baseHours+extraHours(),lines="";if(["Fin de bail","Fin de chantier"].includes(state.type)){
  let grouped={};
  state.rooms.forEach(r=>{if(!grouped[r.name])grouped[r.name]={q:0,h:0};grouped[r.name].q++;grouped[r.name].h+=r.items.reduce((a,x)=>a+x.qty*x.time,0)});
  lines=Object.entries(grouped).map(([n,v])=>`<div class="sum"><span>${esc(n)} × ${v.q}</span><b>${hfmt(v.h)}</b></div>`).join("");
 }else if(state.type==="Vitres et stores")lines=state.glass.map(x=>`<div class="sum"><span>${esc(x.name)} × ${x.qty}</span><b>${hfmt(x.qty*glassTime(x.name,x.size)*x.soil)}</b></div>`).join("");else if(state.type==="Entretien"){let visits={"2w":8.66,"1w":4.33,"2m":2,"1m":1}[state.ent.freq];lines=`<div class="sum"><span>${esc(state.ent.kind)}</span><b>${hfmt(h)} / intervention</b></div><div class="sum"><span>Estimation mensuelle</span><b>${hfmt(h*visits)}</b></div>`+entDetails().filter(x=>x[1]>0).map(x=>`<div class="sum mut"><span>↳ ${esc(x[0])}</span><span>${Math.round(x[1]*60)} min base</span></div>`).join("")}else lines=state.specials.map(x=>`<div class="sum"><span>${esc(x.name)}</span><b>${hfmt((x.qty/Math.max(.01,x.rate))*x.soil)}</b></div>`).join("");
+ lines+=state.extras.map(x=>`<div class="sum"><span>+ ${esc(x.name)} × ${num(x.qty)}</span><b>${hfmt(extraLineHours(x))}</b></div>`).join("");
  $("summaryType").textContent=state.type;$("summaryLines").innerHTML=lines;if(state.type==="Entretien"){
- let [elo,ehi]=entretienRange();
+ let [elo,ehi]=entretienRange();elo+=extraHours();ehi+=extraHours();
  $("hours").textContent=rangeFmt(elo,ehi);
  state.crew=Math.max(1,num($("crew").value,1));
  $("crewTime").textContent=rangeFmt(elo/state.crew,ehi/state.crew);
@@ -325,7 +343,7 @@ function renderSummary(){let h=calcHours(),lines="";if(["Fin de bail","Fin de ch
  if($("printProRate"))$("printProRate").textContent=`${rate.toFixed(2).replace(".00","")} CHF/h`;
  if($("printProTotal")){
    if(state.type==="Entretien"){
-     let [plo,phi]=entretienRange();
+     let [plo,phi]=entretienRange();plo+=extraHours();phi+=extraHours();
      $("printProTotal").textContent=`${Math.round(plo*rate).toLocaleString("fr-CH")} – ${Math.round(phi*rate).toLocaleString("fr-CH")} CHF`;
    }else{
      $("printProTotal").textContent=`${(Math.round(h*rate*100)/100).toLocaleString("fr-CH",{minimumFractionDigits:2,maximumFractionDigits:2})} CHF`;
@@ -336,7 +354,9 @@ function renderSummary(){let h=calcHours(),lines="";if(["Fin de bail","Fin de ch
 $("crew").oninput=renderSummary;
 $("client").addEventListener("input",saveEstimate);
 $("project").addEventListener("input",saveEstimate);
-function renderAll(){renderTypeTabs();renderPanels();renderRooms();renderGlass();renderEnt();renderSpecials();renderSummary();saveEstimate()}
+$("estimateDate").addEventListener("change",saveEstimate);
+$("remarks").addEventListener("input",saveEstimate);
+function renderAll(){renderTypeTabs();renderPanels();renderRooms();renderGlass();renderEnt();renderSpecials();renderExtras();renderSummary();saveEstimate()}
 function renderSettingsTabs(){$("settingsTabs").innerHTML=[["rooms","Pièces / zones"],["glass","Vitres / stores"],["ent","Entretien"],["special","Travaux spécifiques"],["professional","Professionnel"]].map(([k,l])=>`<button class="btn tab ${state.settingsTab===k?"active":""}" data-stab="${k}">${l}</button>`).join("")}
 $("settingsBtn").onclick=()=>{state.settingsTab="rooms";renderSettings();openModal("settingsModal");
  let rb=$("resetSettingsBtn");if(rb)rb.onclick=()=>{if(confirm("Restaurer tous les paramètres génériques ? Vos réglages personnalisés seront remplacés.")){config=clone(DEFAULTS);saveConfig();renderSettings();renderAll()}}
@@ -380,9 +400,9 @@ $("settingsBody").addEventListener("click",e=>{
  }
 });
 $("newBtn").onclick=()=>{if(confirm("Créer une nouvelle estimation ?")){
- state.type="Fin de bail";state.rooms=[];state.glass=[];state.specials=[];state.crew=1;
+ state.type="Fin de bail";state.rooms=[];state.glass=[];state.specials=[];state.extras=[];state.crew=1;
  state.ent={kind:"Bureaux",sqm:100,workstations:8,wc:1,washbasins:1,cafe:1,meeting:1,bins:8,swissRooms:"4.5",bedrooms:3,livingrooms:1,bathrooms:1,showerrooms:0,separateWCs:1,kitchens:1,stairs:1,floorsCount:3,halls:1,elevators:1,elevatorSize:"Standard",floor:"Mixte",level:"Standard",freq:"1w"};
- $("client").value="";$("project").value="";$("crew").value="1";localStorage.removeItem("cleanestimator_estimate");renderAll()
+ $("client").value="";$("project").value="";$("estimateDate").value="";$("remarks").value="";$("crew").value="1";localStorage.removeItem("cleanestimator_estimate");renderAll()
 }};
 
 function printRoomDetail(r){
@@ -394,6 +414,9 @@ function printRoomDetail(r){
 function buildSimplePrint(){
  $("spClient").textContent=$("client").value.trim()||"—";
  $("spService").textContent=state.type==="Entretien"?`Entretien — ${state.ent.kind}`:state.type;
+ $("spProject").textContent=$("project").value.trim()||"—";
+ $("spDate").textContent=$("estimateDate").value||new Date().toLocaleDateString("fr-CH");
+ $("spRemarks").textContent=$("remarks").value.trim()?`Remarques : ${$("remarks").value.trim()}`:"";
  let rows=[];
  if(["Fin de bail","Fin de chantier"].includes(state.type)){
   state.rooms.forEach(r=>{
@@ -416,15 +439,18 @@ function buildSimplePrint(){
   }
   rows.push([c.length?c.join(" + "):e.kind,rangeFmt(lo,hi)]);
  }
+ state.extras.forEach(x=>rows.push([`${x.name} × ${num(x.qty)} ${x.kind==="glass"?x.size:x.unit}`,hfmt(extraLineHours(x))]));
  $("spRows").innerHTML=rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("");
  if(state.type==="Entretien"){
   let [lo,hi]=entretienRange(),rate=num(config.professional.hourlyRate,55);
+  lo+=extraHours();hi+=extraHours();
   $("spTotal").textContent=rangeFmt(lo,hi);
-  $("spPrice").textContent=`${Math.round(lo*rate).toLocaleString("fr-CH")} – ${Math.round(hi*rate).toLocaleString("fr-CH")} CHF`;
+  $("spPrice").textContent=config.professional.enabled?`${Math.round(lo*rate).toLocaleString("fr-CH")} – ${Math.round(hi*rate).toLocaleString("fr-CH")} CHF`:`${priceRange(lo)[0]} – ${priceRange(hi)[1]} CHF`;
  }else{
-  let h=calcHours(),p=priceRange(h);
-  $("spTotal").textContent=hfmt(h);$("spPrice").textContent=`${p[0]} – ${p[1]} CHF`;
+  let h=calcHours()+extraHours(),p=priceRange(h),rate=num(config.professional.hourlyRate,55);
+  $("spTotal").textContent=hfmt(h);$("spPrice").textContent=config.professional.enabled?`${(Math.round(h*rate*100)/100).toLocaleString("fr-CH",{minimumFractionDigits:2,maximumFractionDigits:2})} CHF`:`${p[0]} – ${p[1]} CHF`;
  }
+ $("spPriceLabel").textContent=config.professional.enabled?"Prix estimé":"Prix indicatif";
 }
 
 $("printBtn").onclick=()=>{buildSimplePrint();window.print()};
@@ -454,9 +480,10 @@ loadEstimate();renderAll();
 
 <section id="simplePrintSheet" class="simple-print-sheet">
  <div class="sp-head"><div class="sp-logo">Clean<span>Estimator</span></div><div class="sp-sub">Estimation du temps de nettoyage</div></div>
- <div class="sp-meta"><div><span>Client</span><b id="spClient">—</b></div><div><span>Prestation</span><b id="spService">—</b></div></div>
+ <div class="sp-meta"><div><span>Client</span><b id="spClient">—</b></div><div><span>Prestation</span><b id="spService">—</b></div><div><span>Projet / adresse</span><b id="spProject">—</b></div><div><span>Date</span><b id="spDate">—</b></div></div>
  <table class="sp-table"><thead><tr><th>Pièce / prestation</th><th>Temps</th></tr></thead><tbody id="spRows"></tbody><tfoot><tr><td>TOTAL</td><td id="spTotal">0 h</td></tr></tfoot></table>
- <div class="sp-price"><span>Prix indicatif</span><strong id="spPrice">—</strong></div>
+ <div class="sp-price"><span id="spPriceLabel">Prix indicatif</span><strong id="spPrice">—</strong></div>
+ <p id="spRemarks" class="sp-remarks"></p>
  <p class="sp-note">Estimation indicative. Le temps et le prix peuvent varier selon l'état des lieux, le niveau de salissure, l'accès et l'évaluation du technicien.</p>
 </section>
 
